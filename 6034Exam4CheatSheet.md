@@ -153,6 +153,12 @@ $$
 ![Probability Flowchart](probability-flowchart.pdf)
 
 
+####Prior and Posterior
+
+__Prior Probability__: $P(A)$ - probability of a variable with no evidence
+
+__Posterior Probability__: $P(A \mid E)$ - probability of a variable given some evidence
+
 ###Number of Parameters
 
 __2 Boolean Variables__:
@@ -187,6 +193,7 @@ $$
 $$
 P(F\mid \not{A}\not{B}\not{C}D\not{E}) = P(F\mid D)
 $$
+
 
 
 ###D-Separation
@@ -228,3 +235,62 @@ If the independence question had any given variables, erase those variables from
 net does not require the variables to be independent,” but we cannot guarantee dependency
 using d-separation alone, because the variables can still be numerically independent (e.g. if
 $P(A \mid B)$ and $P(A)$ happen to be equal for all values of $A$ and $B$).
+
+
+#### "Explaining Away"
+
+
+Suppose $A$ and $B$ are two people who have a child $C$.  
+
+$A$ and $B$ are unrelated people, so whether either of them has some trait -- such as blue eyes -- is independent.  Let's say that having blue eyes is rare.
+
+Regardless of what we know about $B$, $A$ has blue eyes with some low probability, say $5$%.  
+
+But if we then find out that their child $C$ has blue eyes, $A$ and $B$ are no longer independent.
+
+Now, if we know that $B$ has blue eyes and $C$ has blue eyes, $B$'s having blue eyes "explains away" $C$'s having blue eyes, making it less likely that $A$ has blue eyes (say, $1$% probability).  
+
+This is also known as Berkson's Paradox: If $A$, $B$, and $C$ are unlikely events, and $C$ is dependent on $A$ and $B$, then $P(A \mid BC) < P(A \mid C)$.
+
+###Naive Bayes Classification
+
+![Naive Bayes Classification Net](naivebayesclassificationexample.jpg)
+
+__Assumption__: Features $(X_1, X_2, X_3)$ are conditionally independent of each other given classification $Y$.
+
+To classify a point with features: $X_1 = a, X_2 = b, X_3 = c$
+
+Want:
+
+$$
+\underbrace{P(Y = y_i \mid X_1 = a, X_2 = b, X_3 = c)}_{\text{posterior probability}}
+$$
+
+Via Bayes Rule:
+$$
+P(Y = y_i \mid X_1 = a, X_2 = b, X_3 = c) = \frac{P(X_1 = a, X_2 = b, X_3 = c \mid Y = y_i)\overbrace{P(Y=y_i)}^{\text{prior probability}}}{P(X_1 = a, X_2 = b, X_3 = c)}
+$$
+
+Note (also applying independence assumption here):
+
+$$
+P(Y = y_i \mid X_1 = a, X_2 = b, X_3 = c) \propto P(X_1 = a \mid Y = y_i) P( X_2 = b \mid Y = y_i) P( X_3 = c \mid Y = y_i)P(Y=y_i)
+$$
+
+And so you want to compare all the classifications, and take the largest probability
+
+###Model Selection
+
+Given several models, $M_i$, that could explain data (evidence), you want to pick the $M_i$ that maximizes:
+
+(Can also apply independence assumption here)
+
+$$
+P(M_i \mid \text{data}) = \frac{P(\text{data} \mid M_i)P(M_i)}{P(\text{data})}
+$$
+
+Note:
+
+$$
+P(M_i \mid \text{data}) \propto P(\text{data} \mid M_i)P(M_i)
+$$
